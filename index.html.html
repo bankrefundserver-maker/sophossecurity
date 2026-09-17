@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Cancellation Center</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Arial, Helvetica, sans-serif;
+      background:
+        radial-gradient(circle at top right, rgba(0, 120, 255, 0.12), transparent 35%),
+        linear-gradient(135deg, #06101c, #0b1725 50%, #07111c);
+      color: #eaf2f8;
+      display: flex;
+      justify-content: center;
+      padding: 30px 16px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .notice {
+      background: #102334;
+      border: 1px solid #1d5275;
+      border-radius: 10px;
+      padding: 13px 16px;
+      text-align: center;
+      color: #bfe7ff;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    .panel {
+      background: rgba(10, 24, 38, 0.96);
+      border: 1px solid #1d3549;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45);
+    }
+
+    header {
+      padding: 28px 30px;
+      border-bottom: 1px solid #20384c;
+      background: linear-gradient(135deg, #0c1d2d, #0a1724);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo {
+      width: 54px;
+      height: 54px;
+      object-fit: contain;
+      flex-shrink: 0;
+    }
+
+    .brand-text h1 {
+      font-size: 22px;
+      letter-spacing: 1.5px;
+      color: #ffffff;
+    }
+
+    .brand-text p {
+      color: #8fa9bd;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .content {
+      padding: 32px;
+    }
+
+    .title {
+      margin-bottom: 26px;
+    }
+
+    .title h2 {
+      font-size: 26px;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .title p {
+      color: #8fa9bd;
+      line-height: 1.6;
+      font-size: 14px;
+    }
+
+    .security-box {
+      background: #0b2030;
+      border: 1px solid #174761;
+      border-radius: 10px;
+      padding: 15px 17px;
+      margin-bottom: 26px;
+      color: #a9d9f3;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .security-box strong {
+      color: #d9f3ff;
+    }
+
+    form {
+      display: grid;
+      gap: 20px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      color: #c6d6e1;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      background: #071522;
+      color: #edf7fc;
+      border: 1px solid #294256;
+      border-radius: 8px;
+      padding: 13px 14px;
+      font-family: inherit;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #159ee8;
+      box-shadow: 0 0 0 3px rgba(21, 158, 232, 0.12);
+    }
+
+    select {
+      cursor: pointer;
+    }
+
+    textarea {
+      min-height: 100px;
+      resize: vertical;
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .other-bank {
+      display: none;
+    }
+
+    .other-bank.visible {
+      display: flex;
+    }
+
+    .helper {
+      color: #70899b;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .consent {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      background: #091a28;
+      border: 1px solid #1d3447;
+      border-radius: 9px;
+      padding: 14px;
+    }
+
+    .consent input {
+      width: 17px;
+      height: 17px;
+      margin-top: 2px;
+      accent-color: #159ee8;
+    }
+
+    .consent label {
+      font-weight: normal;
+      color: #9fb3c1;
+      line-height: 1.5;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 13px 22px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.15s, opacity 0.15s;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+    }
+
+    .secondary {
+      background: #172b3c;
+      color: #c8d7e2;
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #0798e2, #006bb7);
+      color: white;
+      box-shadow: 0 8px 20px rgba(0, 126, 196, 0.22);
+    }
+
+    .error {
+      display: none;
+      color: #ff9e9e;
+      background: #30171b;
+      border: 1px solid #633139;
+      padding: 11px 13px;
+      border-radius: 7px;
+      font-size: 13px;
+    }
+
+    .error.show {
+      display: block;
+    }
+
+    #confirmationSection {
+      display: none;
+    }
+
+    .confirmation-card {
+      text-align: center;
+      padding: 20px 5px 10px;
+    }
+
+    .success-icon {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: rgba(45, 205, 117, 0.12);
+      border: 2px solid #31d27b;
+      color: #42df89;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      margin: 0 auto 20px;
+    }
+
+    .confirmation-card h2 {
+      font-size: 25px;
+      margin-bottom: 9px;
+    }
+
+    .confirmation-card > p {
+      color: #8fa9bd;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .reference {
+      margin: 25px auto;
+      max-width: 450px;
+      background: #071522;
+      border: 1px solid #28455a;
+      border-radius: 10px;
+      padding: 18px;
+    }
+
+    .reference span {
+      display: block;
+      color: #718da1;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 7px;
+    }
+
+    .reference strong {
+      color: #5fcaff;
+      font-size: 22px;
+      letter-spacing: 2px;
+    }
+
+    .details {
+      text-align: left;
+      max-width: 600px;
+      margin: 0 auto 25px;
+      display: grid;
+      gap: 9px;
+    }
+
+    .detail-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      background: #091a28;
+      padding: 12px 14px;
+      border-radius: 7px;
+      border: 1px solid #172f42;
+      font-size: 13px;
+    }
+
+    .detail-row span:first-child {
+      color: #718da1;
+    }
+
+    .detail-row span:last-child {
+      color: #d9e7ef;
+      text-align: right;
+    }
+
+    .confirmation-note {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #0b2030;
+      border: 1px solid #174761;
+      color: #9cc9df;
+      border-radius: 9px;
+      padding: 14px;
+      font-size: 12px;
+      line-height: 1.55;
+    }
+
+    footer {
+      text-align: center;
+      color: #5f7789;
+      font-size: 11px;
+      padding: 18px 10px 4px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 680px) {
+      body {
+        padding: 15px 10px;
+      }
+
+      header,
+      .content {
+        padding: 22px 18px;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .full {
+        grid-column: auto;
+      }
+
+      .actions {
+        flex-direction: column-reverse;
+      }
+
+      button {
+        width: 100%;
+      }
+
+      .detail-row {
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .detail-row span:last-child {
+        text-align: left;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="app">
+
+    <div class="notice">
+      Sophos Cancelation/Refund Form
+    </div>
+
+    <section class="panel">
+
+      <header>
+  <div class="brand">
+
+    <div class="brand-text">
+      <h1>SOPHOS CANCELLATION CENTER</h1>
+      <p>Secure service management portal</p>
+    </div>
+
+  </div>
+</header>
+
+      <div class="content">
+
+        <section id="formSection">
+
+          <div class="title">
+            <h2>Cancel Service</h2>
+            <p>
+              Submit the information below to create a cancellation
+              request record. No payment credentials or banking login
+              information are required.
+            </p>
+          </div>
+
+          <div class="security-box">
+            <strong>Security notice:</strong>
+            Never enter a password, banking PIN, OTP, card number, CVV,
+            online-banking login, or full bank-account number into this form.
+          </div>
+
+          <form id="cancelForm">
+
+            <div class="grid">
+
+              <div class="field">
+                <label for="fullName">Full name</label>
+
+                <input
+                  id="fullName"
+                  type="text"
+                  placeholder="Enter your name"
+                  autocomplete="name"
+                  required
+                >
+              </div>
+
+              <div class="field">
+                <label for="email">Email address</label>
+
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  autocomplete="email"
+                  required
+                >
+              </div>
+
+              <div class="field">
+                <label for="country">Country</label>
+
+                <select id="country" required>
+                  <option value="">Select country</option>
+                  <option value="usa">United States</option>
+                  <option value="canada">Canada</option>
+                  <option value="uk">United Kingdom</option>
+                  <option value="india">India</option>
+                  <option value="australia">Australia</option>
+                  <option value="newzealand">New Zealand</option>
+                  <option value="germany">Germany</option>
+                  <option value="france">France</option>
+                  <option value="spain">Spain</option>
+                  <option value="italy">Italy</option>
+                  <option value="netherlands">Netherlands</option>
+                  <option value="singapore">Singapore</option>
+                  <option value="uae">United Arab Emirates</option>
+                  <option value="japan">Japan</option>
+                </select>
+              </div>
+
+              <div class="field">
+                <label for="bank">Bank / financial institution</label>
+
+                <select id="bank" required disabled>
+                  <option value="">
+                    Select a country first
+                  </option>
+                </select>
+              </div>
+
+              <div
+                class="field full other-bank"
+                id="otherBankField"
+              >
+                <label for="otherBank">
+                  Enter your bank / institution name
+                </label>
+
+                <input
+                  id="otherBank"
+                  type="text"
+                  placeholder="Type the institution name"
+                >
+
+                <span class="helper">
+                  Only enter the institution's name. Do not enter account
+                  numbers or banking credentials.
+                </span>
+              </div>
+
+              <div class="field">
+                <label for="service">
+                  Service / subscription
+                </label>
+
+                <input
+                  id="service"
+                  type="text"
+                  placeholder="Name of service"
+                  required
+                >
+              </div>
+
+              <!-- REFUND AMOUNT -->
+              <div class="field">
+                <label for="refundAmount">
+                  Refund amount
+                </label>
+
+                <input
+                  id="refundAmount"
+                  type="number"
+                  min="0"
+                  step="0.01"
+                  placeholder="0.00"
+                  required
+                >
+
+                <span class="helper">
+                  Enter the requested refund amount only.
+                </span>
+              </div>
+
+              <div class="field">
+                <label for="reason">
+                  Cancellation reason
+                </label>
+
+                <select id="reason" required>
+                  <option value="">Select a reason</option>
+                  <option>No longer needed</option>
+                  <option>Cost / pricing</option>
+                  <option>Technical issue</option>
+                  <option>Found an alternative</option>
+                  <option>Duplicate purchase</option>
+                  <option>Other</option>
+                </select>
+              </div>
+
+              <div class="field full">
+                <label for="notes">
+                  Additional information
+                </label>
+
+                <textarea
+                  id="notes"
+                  placeholder="Optional cancellation details..."
+                ></textarea>
+
+                <span class="helper">
+                  Do not include passwords, PINs, OTPs, card numbers,
+                  CVVs, account numbers, or other authentication information.
+                </span>
+              </div>
+
+            </div>
+
+            <div id="errorBox" class="error"></div>
+
+            <div class="consent">
+              <input
+                id="confirmation"
+                type="checkbox"
+                required
+              >
+
+              <label for="confirmation">
+                I confirm that the information entered above is accurate and
+                that I have not entered passwords, PINs, OTPs, card details,
+                CVVs, account numbers, or banking login credentials.
+              </label>
+            </div>
+
+            <div class="actions">
+
+              <button
+                type="reset"
+                class="secondary"
+              >
+                Clear form
+              </button>
+
+              <button
+                type="submit"
+                class="primary"
+              >
+                Create cancellation request
+              </button>
+
+            </div>
+
+          </form>
+
+        </section>
+
+        <section
+          id="confirmationSection"
+          class="confirmation-card"
+        >
+
+          <div class="success-icon">
+            ✓
+          </div>
+
+          <h2>
+            Cancellation Request Created
+          </h2>
+
+          <p>
+            Your request has been recorded in this browser session.
+          </p>
+
+          <div class="reference">
+
+            <span>
+              Cancellation reference
+            </span>
+
+            <strong id="referenceId">
+              SEC-000000
+            </strong>
+
+          </div>
+
+          <div class="details">
+
+            <div class="detail-row">
+              <span>Name</span>
+              <span id="confirmName"></span>
+            </div>
+
+            <div class="detail-row">
+              <span>Email</span>
+              <span id="confirmEmail"></span>
+            </div>
+
+            <div class="detail-row">
+              <span>Country</span>
+              <span id="confirmCountry"></span>
+            </div>
+
+            <div class="detail-row">
+              <span>Institution</span>
+              <span id="confirmBank"></span>
+            </div>
+
+            <div class="detail-row">
+              <span>Service</span>
+              <span id="confirmService"></span>
+            </div>
+
+            <div class="detail-row">
+              <span>Refund amount</span>
+              <span id="confirmRefund"></span>
+            </div>
+
+            <div class="detail-row">
+              <span>Reason</span>
+              <span id="confirmReason"></span>
+            </div>
+
+          </div>
+
+          <div class="confirmation-note">
+            Your request has been sent to us,
+            We will confirm it as soon as possible.
+            Thank you for choosing us.
+          </div>
+
+          <div
+            class="actions"
+            style="justify-content:center; margin-top:22px;"
+          >
+            <button
+              type="button"
+              class="secondary"
+              onclick="startAgain()"
+            >
+              Create another request
+            </button>
+          </div>
+
+        </section>
+
+      </div>
+    </section>
+
+    <footer>
+      Sophos Security Refund/ Cancellation interface.
+      <br>
+    </footer>
+
+  </main>
+
+
+  <script>
+
+    const banksByCountry = {
+
+      usa: [
+        "Bank of America",
+        "JPMorgan Chase",
+        "Wells Fargo",
+        "Citibank",
+        "U.S. Bank",
+        "PNC Bank",
+        "Capital One",
+        "Truist Bank",
+        "TD Bank",
+        "Fifth Third Bank",
+        "KeyBank",
+        "Ally Bank",
+        "Citizens Bank",
+        "Regions Bank",
+        "Huntington National Bank",
+        "M&T Bank"
+      ],
+
+      canada: [
+        "Royal Bank of Canada",
+        "TD Canada Trust",
+        "Scotiabank",
+        "Bank of Montreal",
+        "CIBC",
+        "National Bank of Canada",
+        "Desjardins",
+        "Tangerine Bank",
+        "Simplii Financial",
+        "EQ Bank"
+      ],
+
+      uk: [
+        "Barclays",
+        "HSBC UK",
+        "Lloyds Bank",
+        "NatWest",
+        "Royal Bank of Scotland",
+        "Halifax",
+        "Nationwide Building Society",
+        "Santander UK",
+        "TSB",
+        "Metro Bank",
+        "Virgin Money"
+      ],
+
+      india: [
+        "State Bank of India",
+        "HDFC Bank",
+        "ICICI Bank",
+        "Axis Bank",
+        "Kotak Mahindra Bank",
+        "IndusInd Bank",
+        "Punjab National Bank",
+        "Bank of Baroda",
+        "Canara Bank",
+        "Union Bank of India",
+        "Bank of India",
+        "Indian Bank",
+        "IDBI Bank",
+        "Federal Bank",
+        "Yes Bank",
+        "RBL Bank",
+        "AU Small Finance Bank"
+      ],
+
+      australia: [
+        "Commonwealth Bank",
+        "Westpac",
+        "ANZ",
+        "National Australia Bank",
+        "Macquarie Bank",
+        "Bendigo Bank",
+        "Suncorp Bank",
+        "Bank of Queensland",
+        "ING Australia",
+        "AMP Bank"
+      ],
+
+      newzealand: [
+        "ANZ New Zealand",
+        "ASB Bank",
+        "Bank of New Zealand",
+        "Westpac New Zealand",
+        "Kiwibank",
+        "TSB Bank",
+        "Heartland Bank"
+      ],
+
+      germany: [
+        "Deutsche Bank",
+        "Commerzbank",
+        "DZ Bank",
+        "KfW",
+        "ING Germany",
+        "DKB",
+        "N26",
+        "Volksbank",
+        "Sparkasse"
+      ],
+
+      france: [
+        "BNP Paribas",
+        "Crédit Agricole",
+        "Société Générale",
+        "BPCE",
+        "Banque Postale",
+        "Crédit Mutuel",
+        "HSBC France",
+        "Boursobank"
+      ],
+
+      spain: [
+        "Banco Santander",
+        "BBVA",
+        "CaixaBank",
+        "Banco Sabadell",
+        "Bankinter",
+        "Unicaja Banco",
+        "Abanca",
+        "ING Spain"
+      ],
+
+      italy: [
+        "UniCredit",
+        "Intesa Sanpaolo",
+        "Banco BPM",
+        "BPER Banca",
+        "Mediobanca",
+        "Monte dei Paschi di Siena",
+        "FinecoBank",
+        "Banca Sella"
+      ],
+
+      netherlands: [
+        "ING Netherlands",
+        "ABN AMRO",
+        "Rabobank",
+        "de Volksbank",
+        "ASN Bank",
+        "Triodos Bank",
+        "Knab"
+      ],
+
+      singapore: [
+        "DBS Bank",
+        "OCBC Bank",
+        "United Overseas Bank",
+        "Standard Chartered Singapore",
+        "Citibank Singapore",
+        "HSBC Singapore",
+        "Maybank Singapore"
+      ],
+
+      uae: [
+        "Emirates NBD",
+        "First Abu Dhabi Bank",
+        "Abu Dhabi Commercial Bank",
+        "Dubai Islamic Bank",
+        "Mashreq",
+        "RAKBANK",
+        "Commercial Bank of Dubai",
+        "ADIB"
+      ],
+
+      japan: [
+        "MUFG Bank",
+        "SMBC",
+        "Mizuho Bank",
+        "Resona Bank",
+        "Japan Post Bank",
+        "SBI Sumishin Net Bank",
+        "Sony Bank",
+        "Rakuten Bank"
+      ]
+
+    };
+
+
+    const countryNames = {
+
+      usa: "United States",
+      canada: "Canada",
+      uk: "United Kingdom",
+      india: "India",
+      australia: "Australia",
+      newzealand: "New Zealand",
+      germany: "Germany",
+      france: "France",
+      spain: "Spain",
+      italy: "Italy",
+      netherlands: "Netherlands",
+      singapore: "Singapore",
+      uae: "United Arab Emirates",
+      japan: "Japan"
+
+    };
+
+
+    const countrySelect =
+      document.getElementById("country");
+
+    const bankSelect =
+      document.getElementById("bank");
+
+    const otherBankField =
+      document.getElementById("otherBankField");
+
+    const otherBankInput =
+      document.getElementById("otherBank");
+
+    const form =
+      document.getElementById("cancelForm");
+
+    const errorBox =
+      document.getElementById("errorBox");
+
+    const formSection =
+      document.getElementById("formSection");
+
+    const confirmationSection =
+      document.getElementById("confirmationSection");
+
+
+    countrySelect.addEventListener("change", function () {
+
+      const country = this.value;
+
+      bankSelect.innerHTML = "";
+
+      otherBankField.classList.remove("visible");
+      otherBankInput.required = false;
+      otherBankInput.value = "";
+
+      if (!country) {
+
+        bankSelect.disabled = true;
+
+        const option =
+          document.createElement("option");
+
+        option.value = "";
+        option.textContent =
+          "Select a country first";
+
+        bankSelect.appendChild(option);
+
+        return;
+      }
+
+      bankSelect.disabled = false;
+
+      const placeholder =
+        document.createElement("option");
+
+      placeholder.value = "";
+      placeholder.textContent =
+        "Select a bank / institution";
+
+      bankSelect.appendChild(placeholder);
+
+
+      banksByCountry[country].forEach(function (bank) {
+
+        const option =
+          document.createElement("option");
+
+        option.value = bank;
+        option.textContent = bank;
+
+        bankSelect.appendChild(option);
+
+      });
+
+
+      const otherOption =
+        document.createElement("option");
+
+      otherOption.value = "other";
+      otherOption.textContent =
+        "Other bank / institution";
+
+      bankSelect.appendChild(otherOption);
+
+    });
+
+
+    bankSelect.addEventListener("change", function () {
+
+      if (this.value === "other") {
+
+        otherBankField.classList.add("visible");
+
+        otherBankInput.required = true;
+
+        otherBankInput.focus();
+
+      } else {
+
+        otherBankField.classList.remove("visible");
+
+        otherBankInput.required = false;
+
+        otherBankInput.value = "";
+
+      }
+
+    });
+
+
+    function generateReference() {
+
+      const now = new Date();
+
+      const date =
+        now.getFullYear().toString().slice(-2) +
+        String(now.getMonth() + 1).padStart(2, "0") +
+        String(now.getDate()).padStart(2, "0");
+
+      const random =
+        Math.floor(100000 + Math.random() * 900000);
+
+      return "SEC-" + date + "-" + random;
+
+    }
+
+
+    function showError(message) {
+
+      errorBox.textContent = message;
+
+      errorBox.classList.add("show");
+
+      errorBox.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+    }
+
+
+    function clearError() {
+
+      errorBox.textContent = "";
+
+      errorBox.classList.remove("show");
+
+    }
+
+
+    form.addEventListener("submit", function (event) {
+
+      event.preventDefault();
+
+      clearError();
+
+
+      if (!form.checkValidity()) {
+
+        showError(
+          "Please complete all required fields before continuing."
+        );
+
+        form.reportValidity();
+
+        return;
+
+      }
+
+
+      const name =
+        document.getElementById("fullName").value.trim();
+
+      const email =
+        document.getElementById("email").value.trim();
+
+      const country =
+        countrySelect.value;
+
+      const service =
+        document.getElementById("service").value.trim();
+
+      const refundAmount =
+        document.getElementById("refundAmount").value;
+
+      const reason =
+        document.getElementById("reason").value;
+
+      const notes =
+        document.getElementById("notes").value.trim();
+
+
+      let bank = bankSelect.value;
+
+      if (bank === "other") {
+
+        bank = otherBankInput.value.trim();
+
+        if (!bank) {
+
+          showError(
+            "Please enter your bank or financial institution name."
+          );
+
+          return;
+
+        }
+
+      }
+
+
+      const allText = (
+        name + " " +
+        email + " " +
+        service + " " +
+        bank + " " +
+        notes
+      ).toLowerCase();
+
+
+      const blockedTerms = [
+
+        "password",
+        "passcode",
+        "pin",
+        "otp",
+        "cvv",
+        "cvc",
+        "credit card",
+        "debit card",
+        "card number",
+        "account number",
+        "banking login"
+
+      ];
+
+
+      const foundSensitiveTerm =
+        blockedTerms.some(function (term) {
+
+          return allText.includes(term);
+
+        });
+
+
+      if (foundSensitiveTerm) {
+
+        showError(
+          "Please remove sensitive banking or authentication information. " +
+          "This form does not require passwords, PINs, OTPs, card details, " +
+          "CVVs, or account numbers."
+        );
+
+        return;
+
+      }
+
+
+      document.getElementById("confirmName").textContent =
+        name;
+
+      document.getElementById("confirmEmail").textContent =
+        email;
+
+      document.getElementById("confirmCountry").textContent =
+        countryNames[country];
+
+      document.getElementById("confirmBank").textContent =
+        bank;
+
+      document.getElementById("confirmService").textContent =
+        service;
+
+      document.getElementById("confirmRefund").textContent =
+        refundAmount;
+
+      document.getElementById("confirmReason").textContent =
+        reason;
+
+      document.getElementById("referenceId").textContent =
+        generateReference();
+
+
+      formSection.style.display = "none";
+
+      confirmationSection.style.display = "block";
+
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    });
+
+
+    form.addEventListener("reset", function () {
+
+      clearError();
+
+      setTimeout(function () {
+
+        countrySelect.value = "";
+
+        bankSelect.innerHTML = "";
+
+        const option =
+          document.createElement("option");
+
+        option.value = "";
+
+        option.textContent =
+          "Select a country first";
+
+        bankSelect.appendChild(option);
+
+        bankSelect.disabled = true;
+
+        otherBankField.classList.remove("visible");
+
+        otherBankInput.required = false;
+
+        otherBankInput.value = "";
+
+      }, 0);
+
+    });
+
+
+    function startAgain() {
+
+      form.reset();
+
+      confirmationSection.style.display = "none";
+
+      formSection.style.display = "block";
+
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+
+    }
+
+  </script>
+
+</body>
+</html>
